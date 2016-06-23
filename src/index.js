@@ -15,7 +15,7 @@ for (var i = 0; i < paths.length; ++i) {
   if (fs.existsSync(pkgFile)) parentPkg = require(pkgFile)
 }
 
-type BufOrStr = Buffer | String
+type BufOrStr = Buffer | string
 
 // options: passphrase, blobKey, metdata, overwrite
 export async function write (file: string, data: BufOrStr, options = {}) {
