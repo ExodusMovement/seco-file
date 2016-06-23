@@ -11,4 +11,4 @@ Don't use this yet.
 Install
 -------
 
-    npm i --save secure-file
+    npm i --save seco-file

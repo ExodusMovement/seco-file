@@ -7,9 +7,11 @@
     "url": "https://github.com/exodusmovement/seco-file/issues"
   },
   "dependencies": {
-    "secure-container": "0.0.2"
+    "secure-container": "0.0.2",
+    "fs-extra": "^0.30.0"
   },
   "devDependencies": {
+    "aw": "^0.1.0",
     "babel-cli": "^6.9.0",
     "babel-eslint": "^6.0.4",
     "babel-plugin-syntax-flow": "^6.8.0",
@@ -50,7 +52,7 @@
     "prepublish": "npm test",
     "posttest": "NODE_ENV=production npm run build",
     "test": "npm run build && npm run lint && npm run unit",
-    "unit": "find ./tests -name *.test.js -exec tape -r babel-register {} \\; | tap-spec"
+    "unit": "find ./tests -name *.test.js -exec node -r babel-register {} \\; | tap-spec"
   },
   "standard": {
     "ignore": "lib/",
