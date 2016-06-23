@@ -12,3 +12,9 @@ Install
 -------
 
     npm i --save seco-file
+
+
+License
+-------
+
+MIT
