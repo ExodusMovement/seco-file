@@ -17,13 +17,21 @@ for (var i = 0; i < paths.length; ++i) {
 
 type BufOrStr = Buffer | String
 
-export async function write (file: string, data: BufOrStr, passphrase: BufOrStr, options = {}) {
+export async function write (file: string, data: BufOrStr, options = {}) {
   let header = conHeader.create({ appName: parentPkg.name, appVersion: parentPkg.version, ...options.header })
-  console.dir(header)
-  let blobKey = crypto.randomBytes(32)
-  let metadata = conMetadata.create()
 
-  conMetadata.encryptBlobKey(metadata, passphrase, blobKey)
+  let blobKey
+  let metadata
+  if (options.passphrase) {
+    blobKey = crypto.randomBytes(32)
+    metadata = conMetadata.create()
+    conMetadata.encryptBlobKey(metadata, options.passphrase, blobKey)
+  } else if (options.metadata && options.blobKey) {
+    blobKey = options.blobKey
+    metadata = options.metadata
+  } else {
+    throw new Error('Must set either passphrase or (metadata and blobKey)')
+  }
 
   data = Buffer.isBuffer(data) ? data : new Buffer(data, 'utf8')
   let { blob: encBlob } = conBlob.encrypt(data, metadata, blobKey)
@@ -42,6 +50,8 @@ export async function write (file: string, data: BufOrStr, passphrase: BufOrStr,
   await new Promise((resolve, reject) => {
     fs.outputFile(file, fileData, err => err ? reject(err) : resolve())
   })
+
+  return { blobKey, metadata }
 }
 
 export async function read (file: string, passphrase: BufOrStr) {
