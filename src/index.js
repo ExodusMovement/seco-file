@@ -17,8 +17,13 @@ for (var i = 0; i < paths.length; ++i) {
 
 type BufOrStr = Buffer | String
 
+// options: passphrase, blobKey, metdata, overwrite
 export async function write (file: string, data: BufOrStr, options = {}) {
+  options = { overwrite: false, ...options }
   let header = conHeader.create({ appName: parentPkg.name, appVersion: parentPkg.version, ...options.header })
+
+  let fileExists = await new Promise(resolve => fs.access(file, err => resolve(!err)))
+  if (!options.overwrite && fileExists) throw new Error(`${file} exists. Set 'overwrite' to true.`)
 
   let blobKey
   let metadata
