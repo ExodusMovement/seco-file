@@ -1,26 +1,18 @@
 /* flow */
 import fs from 'fs-extra'
-import path from 'path'
 import * as crypto from 'crypto'
 import * as conBlob from 'secure-container/lib/blob'
 import * as conHeader from 'secure-container/lib/header'
 import * as conMetadata from 'secure-container/lib/metadata'
 import * as conFile from 'secure-container/lib/file'
 
-var parentPkg
-var paths = (module.parent || module).paths
-for (var i = 0; i < paths.length; ++i) {
-  var dir = path.dirname(paths[i])
-  var pkgFile = path.join(dir, 'package.json')
-  if (fs.existsSync(pkgFile)) parentPkg = require(pkgFile)
-}
-
 type BufOrStr = Buffer | string
 
 // options: passphrase, blobKey, metdata, overwrite
 export async function write (file: string, data: BufOrStr, options = {}) {
   options = { overwrite: false, ...options }
-  let header = conHeader.create({ appName: parentPkg.name, appVersion: parentPkg.version, ...options.header })
+  if (!options.header) console.warn('seco-file: should pass options.header.')
+  let header = conHeader.create(options.header)
 
   let fileExists = await new Promise(resolve => fs.access(file, err => resolve(!err)))
   if (!options.overwrite && fileExists) throw new Error(`${file} exists. Set 'overwrite' to true.`)
