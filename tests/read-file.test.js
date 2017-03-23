@@ -25,3 +25,13 @@ test('readFile w/ string passphrase', async (t) => {
 
   t.end()
 })
+
+test('readFile verifies checksum', async (t) => {
+  const testFile = 'tests/fixtures/corrupted.seco'
+
+  const [err] = await aw(readFile)(testFile, 'opensesame')
+
+  t.assert(err)
+  t.ok(err.message.match(/seco checksum does not match; file may be corrupted/))
+  t.end()
+})

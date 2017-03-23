@@ -58,6 +58,9 @@ export async function read (file: string, passphrase: BufOrStr) {
 
   const fileObj = conFile.decode(fileData)
 
+  const checksum = conFile.computeChecksum(fileObj.metadata, fileObj.blob)
+  if (!fileObj.checksum.equals(checksum)) throw new Error(`${file}: seco checksum does not match; file may be corrupted`)
+
   let md = conMetadata.decode(fileObj.metadata)
   let blobKey = conMetadata.decryptBlobKey(md, passphrase)
   let data = conBlob.decrypt(fileObj.blob, md, blobKey)
