@@ -45,7 +45,11 @@ Returns a Promise. Promise resolves to an Object that contains `blobKey` and `me
 - `file` (String) File to read
 - `passphrase` (String | Buffer) Passphrase to decrypt the file.
 
-Returns a Promise, resolving to a Buffer of the file data.
+Returns a Promise, resolving to an object that contains:
+
+- `data` (Buffer) The file data
+- `blobKey` (Buffer)
+- `metadata` (Object)
 
 License
 -------
