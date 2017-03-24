@@ -30,7 +30,8 @@
   },
   "files": [
     "lib/",
-    "src/"
+    "src/",
+    "README.md"
   ],
   "homepage": "https://github.com/exodusmovement/seco-file#readme",
   "jsnext:main": "./src/index.js",
