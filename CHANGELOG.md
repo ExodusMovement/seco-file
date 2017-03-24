@@ -1,3 +1,8 @@
+1.0.0 / 2017-03-24
+------------------
+- BREAKING: modify `read()` to return blobKey and metadata [#3]
+- check checksum to be valid on `read()` [#2]
+
 0.0.3 / 2016-06-23
 ------------------
 - remove auto package.json include of parent
