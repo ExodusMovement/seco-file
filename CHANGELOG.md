@@ -1,3 +1,7 @@
+1.0.1 / 2017-03-24
+------------------
+- add `README` to package.json
+
 1.0.0 / 2017-03-24
 ------------------
 - BREAKING: modify `read()` to return blobKey and metadata [#3]
