@@ -21,7 +21,6 @@ test('readFile w/ string passphrase', async (t) => {
   t.ifError(readFileErr, 'no error on read')
 
   t.is(readFileRes.toString('utf8'), secretMessage.toString('utf8'), 'verify content is the same')
-  t.true(readFileRes.toString('utf8').indexOf('11 PM'), 'has new content')
 
   t.end()
 })
