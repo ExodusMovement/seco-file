@@ -20,7 +20,9 @@ test('readFile w/ string passphrase', async (t) => {
   const [readFileErr, readFileRes] = await aw(readFile)(testFile, passphrase)
   t.ifError(readFileErr, 'no error on read')
 
-  t.is(readFileRes.toString('utf8'), secretMessage.toString('utf8'), 'verify content is the same')
+  t.is(readFileRes.data.toString('utf8'), secretMessage.toString('utf8'), 'verify content is the same')
+  t.assert(Buffer.isBuffer(readFileRes.blobKey))
+  t.is(typeof readFileRes.metadata, 'object')
 
   t.end()
 })
