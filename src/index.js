@@ -14,8 +14,7 @@ export async function write (file: string, data: BufOrStr, options = {}) {
   if (!options.header) console.warn('seco-file: should pass options.header.')
   let header = conHeader.create(options.header)
 
-  let fileExists = await new Promise(resolve => fs.access(file, err => resolve(!err)))
-  if (!options.overwrite && fileExists) throw new Error(`${file} exists. Set 'overwrite' to true.`)
+  if (!options.overwrite && await fs.pathExists(file)) throw new Error(`${file} exists. Set 'overwrite' to true.`)
 
   let blobKey
   let metadata
@@ -30,7 +29,7 @@ export async function write (file: string, data: BufOrStr, options = {}) {
     throw new Error('Must set either passphrase or (metadata and blobKey)')
   }
 
-  data = Buffer.isBuffer(data) ? data : new Buffer(data, 'utf8')
+  data = Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8')
   let { blob: encBlob } = conBlob.encrypt(data, metadata, blobKey)
 
   const headerBuf = conHeader.serialize(header)
@@ -44,17 +43,13 @@ export async function write (file: string, data: BufOrStr, options = {}) {
   }
   const fileData = conFile.encode(fileObj)
 
-  await new Promise((resolve, reject) => {
-    fs.outputFile(file, fileData, err => err ? reject(err) : resolve())
-  })
+  await fs.outputFile(file, fileData)
 
   return { blobKey, metadata }
 }
 
 export async function read (file: string, passphrase: BufOrStr) {
-  let fileData = await new Promise((resolve, reject) => {
-    fs.readFile(file, (err, fileData) => err ? reject(err) : resolve(fileData))
-  })
+  let fileData = await fs.readFile(file)
 
   const fileObj = conFile.decode(fileData)
 
@@ -63,7 +58,8 @@ export async function read (file: string, passphrase: BufOrStr) {
 
   let metadata = conMetadata.decode(fileObj.metadata)
   let blobKey = conMetadata.decryptBlobKey(metadata, passphrase)
+  let header = conHeader.decode(fileObj.header)
   let data = conBlob.decrypt(fileObj.blob, metadata, blobKey)
 
-  return { data, blobKey, metadata }
+  return { data, blobKey, metadata, header }
 }
