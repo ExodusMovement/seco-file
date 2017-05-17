@@ -58,7 +58,8 @@ export async function read (file: string, passphrase: BufOrStr) {
 
   let metadata = conMetadata.decode(fileObj.metadata)
   let blobKey = conMetadata.decryptBlobKey(metadata, passphrase)
+  let header = conHeader.decode(fileObj.header)
   let data = conBlob.decrypt(fileObj.blob, metadata, blobKey)
 
-  return { data, blobKey, metadata }
+  return { data, blobKey, metadata, header }
 }

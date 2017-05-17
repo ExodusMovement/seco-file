@@ -48,6 +48,7 @@ Returns a Promise. Promise resolves to an Object that contains `blobKey` and `me
 Returns a Promise, resolving to an object that contains:
 
 - `data` (Buffer) The file data
+- `header` (Object) The header for the secure-container
 - `blobKey` (Buffer)
 - `metadata` (Object)
 

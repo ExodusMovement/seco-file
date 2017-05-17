@@ -36,3 +36,27 @@ test('readFile verifies checksum', async (t) => {
   t.ok(err.message.match(/seco checksum does not match; file may be corrupted/))
   t.end()
 })
+
+test('readFile returns header', async (t) => {
+  const testDir = path.join('/tmp', 'test', 'seco-file')
+  const testFile = path.join(testDir, 'secret.bin')
+  fs.emptyDirSync(testDir)
+
+  let secretMessage = Buffer.from('Hi, lets meet at 10 PM to plan our secret mission!', 'utf8')
+  const passphrase = Buffer.from('opensesame')
+  const header = {
+    appName: 'test',
+    appVersion: '1.0.0'
+  }
+
+  const [writeFileErr] = await aw(writeFile)(testFile, secretMessage, { passphrase, overwrite: true, header })
+  t.ifError(writeFileErr, 'no error')
+
+  const [readFileErr, readFileRes] = await aw(readFile)(testFile, passphrase)
+  t.ifError(readFileErr, 'no error on read')
+
+  t.is(readFileRes.header.appName, header.appName, 'appName is returned')
+  t.is(readFileRes.header.appVersion, header.appVersion, 'appVersion is returned')
+
+  t.end()
+})
