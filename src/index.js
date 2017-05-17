@@ -14,8 +14,7 @@ export async function write (file: string, data: BufOrStr, options = {}) {
   if (!options.header) console.warn('seco-file: should pass options.header.')
   let header = conHeader.create(options.header)
 
-  let fileExists = await new Promise(resolve => fs.access(file, err => resolve(!err)))
-  if (!options.overwrite && fileExists) throw new Error(`${file} exists. Set 'overwrite' to true.`)
+  if (!options.overwrite && await fs.pathExists(file)) throw new Error(`${file} exists. Set 'overwrite' to true.`)
 
   let blobKey
   let metadata
@@ -44,17 +43,13 @@ export async function write (file: string, data: BufOrStr, options = {}) {
   }
   const fileData = conFile.encode(fileObj)
 
-  await new Promise((resolve, reject) => {
-    fs.outputFile(file, fileData, err => err ? reject(err) : resolve())
-  })
+  await fs.outputFile(file, fileData)
 
   return { blobKey, metadata }
 }
 
 export async function read (file: string, passphrase: BufOrStr) {
-  let fileData = await new Promise((resolve, reject) => {
-    fs.readFile(file, (err, fileData) => err ? reject(err) : resolve(fileData))
-  })
+  let fileData = await fs.readFile(file)
 
   const fileObj = conFile.decode(fileData)
 
