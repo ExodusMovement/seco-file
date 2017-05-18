@@ -51,8 +51,9 @@
     "build": "babel --ignore=__tests__ src --out-dir lib",
     "lint": "standard",
     "prepublish": "npm test",
-    "posttest": "NODE_ENV=production npm run build",
+    "pretest": "npm run build",
     "test": "npm run lint && npm run unit",
+    "posttest": "NODE_ENV=production npm run build",
     "unit": "find ./tests -name *.test.js -exec node -r babel-register {} \\; | tap-spec"
   },
   "standard": {
