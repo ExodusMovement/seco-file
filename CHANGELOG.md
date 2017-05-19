@@ -1,3 +1,8 @@
+1.1.1 / 2017-05-19
+------------------
+- Remove runtime type checks
+- Upgrade secure-container version (no breaking changes)
+
 1.1.0 / 2017-05-17
 ------------------
 - Return `header` from `readFile()`
