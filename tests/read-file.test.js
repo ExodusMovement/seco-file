@@ -33,6 +33,7 @@ test('readFile verifies checksum', async (t) => {
   const [err] = await aw(readFile)(testFile, 'opensesame')
 
   t.assert(err)
+  t.ok(err.message.includes(testFile))
   t.ok(err.message.match(/seco checksum does not match; file may be corrupted/))
   t.end()
 })
