@@ -1,3 +1,8 @@
+1.2.0 / 2018-02-22
+------------------
+- Add `encryptData()` & `decryptData()` methods
+- Upgrade dependencies
+
 1.1.1 / 2017-05-19
 ------------------
 - Remove runtime type checks
