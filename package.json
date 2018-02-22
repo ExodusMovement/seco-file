@@ -8,19 +8,17 @@
   },
   "dependencies": {
     "secure-container": "^1.0.0",
-    "fs-extra": "^3.0.1"
+    "fs-extra": "^5.0.0"
   },
   "devDependencies": {
     "aw": "^0.1.0",
     "babel-cli": "^6.9.0",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-syntax-flow": "^6.8.0",
-    "babel-plugin-transform-flow-strip-types": "^6.8.0",
-    "babel-plugin-typecheck": "^3.9.0",
-    "babel-preset-node6": "^11.0.0",
+    "babel-eslint": "^8.2.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-2": "^6.5.0",
     "babel-register": "^6.9.0",
-    "standard": "^10.0.2",
+    "standard": "^11.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.5.1",
     "tape-promise": "^2.0.1"
@@ -48,12 +46,11 @@
     "url": "git+https://github.com/exodusmovement/seco-file.git"
   },
   "scripts": {
-    "build": "babel --ignore=__tests__ src --out-dir lib",
+    "build": "NODE_ENV=production babel --ignore=__tests__ src --out-dir lib",
     "lint": "standard",
-    "prepublish": "npm test",
-    "pretest": "npm run build",
+    "prepare": "npm test",
     "test": "npm run lint && npm run unit",
-    "posttest": "NODE_ENV=production npm run build",
+    "posttest": "npm run build",
     "unit": "find ./tests -name *.test.js -exec node -r babel-register {} \\; | tap-spec"
   },
   "standard": {

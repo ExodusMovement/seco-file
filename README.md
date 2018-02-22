@@ -52,6 +52,41 @@ Returns a Promise, resolving to an object that contains:
 - `blobKey` (Buffer)
 - `metadata` (Object)
 
+### `encryptData()`
+
+`encryptData(data, options)`
+
+- `data` (String | Buffer) Data to encrypt
+- `options` (Object)
+  - `header` (Object)
+    - `appName` (String) Name of your app
+    - `appVersion` (String) Version of your app
+  - `passphrase` (String | Buffer) Passphrase used to encrypt the data
+  - `metadata` (Object)
+  - `blobKey` (Buffer)
+
+_Note:_ Must set either `passphrase` or `metadata` & `blobKey`.
+
+Returns an Object that contains:
+
+- `encryptData` (Buffer) The encrypted data
+- `blobKey` (Buffer)
+- `metadata` (Object)
+
+### `decryptData()`
+
+`decryptData(encryptData, passphrase)`
+
+- `encryptData` (Buffer) Data to decrypt
+- `passphrase` (String | Buffer) Passphrase to decrypt the data
+
+Returns an Object that contains:
+
+- `data` (Buffer) The file data
+- `header` (Object) The header for the secure-container
+- `blobKey` (Buffer)
+- `metadata` (Object)
+
 License
 -------
 

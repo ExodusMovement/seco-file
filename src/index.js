@@ -8,13 +8,10 @@ import * as conFile from 'secure-container/lib/file'
 
 type BufOrStr = Buffer | string
 
-// options: passphrase, blobKey, metdata, overwrite
-export async function write (file: string, data: BufOrStr, options = {}) {
-  options = { overwrite: false, ...options }
+// options: passphrase, blobKey, metdata
+export function encryptData (data: BufOrStr, options = {}) {
   if (!options.header) console.warn('seco-file: should pass options.header.')
   let header = conHeader.create(options.header)
-
-  if (!options.overwrite && await fs.pathExists(file)) throw new Error(`${file} exists. Set 'overwrite' to true.`)
 
   let blobKey
   let metadata
@@ -41,20 +38,16 @@ export async function write (file: string, data: BufOrStr, options = {}) {
     metadata: mdBuf,
     blob: encBlob
   }
-  const fileData = conFile.encode(fileObj)
+  const encryptedData = conFile.encode(fileObj)
 
-  await fs.outputFile(file, fileData)
-
-  return { blobKey, metadata }
+  return { encryptedData, blobKey, metadata }
 }
 
-export async function read (file: string, passphrase: BufOrStr) {
-  let fileData = await fs.readFile(file)
-
-  const fileObj = conFile.decode(fileData)
+export function decryptData (encryptedData: Buffer, passphrase: BufOrStr) {
+  const fileObj = conFile.decode(encryptedData)
 
   const checksum = conFile.computeChecksum(fileObj.metadata, fileObj.blob)
-  if (!fileObj.checksum.equals(checksum)) throw new Error(`${file}: seco checksum does not match; file may be corrupted`)
+  if (!fileObj.checksum.equals(checksum)) throw new Error(`seco checksum does not match; data may be corrupted`)
 
   let metadata = conMetadata.decode(fileObj.metadata)
   let blobKey = conMetadata.decryptBlobKey(metadata, passphrase)
@@ -62,4 +55,33 @@ export async function read (file: string, passphrase: BufOrStr) {
   let data = conBlob.decrypt(fileObj.blob, metadata, blobKey)
 
   return { data, blobKey, metadata, header }
+}
+
+// options: passphrase, blobKey, metdata, overwrite
+export async function write (file: string, data: BufOrStr, options = {}) {
+  options = { overwrite: false, ...options }
+
+  if (!options.overwrite && await fs.pathExists(file)) throw new Error(`${file} exists. Set 'overwrite' to true.`)
+
+  const { encryptedData, blobKey, metadata } = encryptData(data, options)
+
+  await fs.outputFile(file, encryptedData)
+
+  return { blobKey, metadata }
+}
+
+export async function read (file: string, passphrase: BufOrStr) {
+  let fileData = await fs.readFile(file)
+
+  let result
+  try {
+    result = decryptData(fileData, passphrase)
+  } catch (e) {
+    if (e.message.match(/seco checksum does not match; data may be corrupted/)) {
+      throw new Error(`${file}: seco checksum does not match; file may be corrupted`)
+    }
+    throw e
+  }
+
+  return result
 }
