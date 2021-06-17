@@ -65,7 +65,9 @@ export async function write (file: string, data: BufOrStr, options = {}) {
 
   const { encryptedData, blobKey, metadata } = encryptData(data, options)
 
-  await fs.outputFile(file, encryptedData)
+  const tmpFile = file + '.tmp'
+  await fs.outputFile(tmpFile, encryptedData)
+  await fs.rename(tmpFile, file)
 
   return { blobKey, metadata }
 }
