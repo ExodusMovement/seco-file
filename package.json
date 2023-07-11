@@ -7,32 +7,29 @@
     "url": "https://github.com/exodusmovement/seco-file/issues"
   },
   "dependencies": {
-    "secure-container": "^1.0.0",
-    "fs-extra": "^5.0.0"
+    "fs-extra": "^5.0.0",
+    "secure-container": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.22.6",
+    "@babel/core": "^7.22.8",
+    "@babel/eslint-parser": "^7.22.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.22.5",
+    "@babel/preset-flow": "^7.22.5",
+    "@babel/register": "^7.22.5",
     "aw": "^0.1.0",
-    "babel-cli": "^6.9.0",
-    "babel-eslint": "^8.2.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-stage-2": "^6.5.0",
-    "babel-register": "^6.9.0",
     "standard": "^11.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.5.1",
     "tape-promise": "^2.0.1"
   },
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 18.0.0"
   },
   "files": [
-    "lib/",
-    "src/",
-    "README.md"
+    "lib/"
   ],
   "homepage": "https://github.com/exodusmovement/seco-file#readme",
-  "jsnext:main": "./src/index.js",
   "keywords": [
     "seco",
     "secure",
@@ -46,15 +43,15 @@
     "url": "git+https://github.com/exodusmovement/seco-file.git"
   },
   "scripts": {
-    "build": "NODE_ENV=production babel --ignore=__tests__ src --out-dir lib",
+    "build": "babel src --out-dir lib",
     "lint": "standard",
     "prepare": "npm test",
     "test": "npm run lint && npm run unit",
     "posttest": "npm run build",
-    "unit": "find ./tests -name *.test.js -exec node -r babel-register {} \\; | tap-spec"
+    "unit": "find ./tests -name *.test.js -exec node -r @babel/register {} \\; | tap-spec"
   },
   "standard": {
     "ignore": "lib/",
-    "parser": "babel-eslint"
+    "parser": "@babel/eslint-parser"
   }
 }
