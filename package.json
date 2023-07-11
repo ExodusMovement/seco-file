@@ -27,12 +27,9 @@
     "node": ">= 18.0.0"
   },
   "files": [
-    "lib/",
-    "src/",
-    "README.md"
+    "lib/"
   ],
   "homepage": "https://github.com/exodusmovement/seco-file#readme",
-  "jsnext:main": "./src/index.js",
   "keywords": [
     "seco",
     "secure",
