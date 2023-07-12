@@ -1,7 +1,7 @@
 {
   "name": "seco-file",
   "description": "Methods to read/write secure containers to files.",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "author": "Exodus Movement, Inc.",
   "bugs": {
     "url": "https://github.com/exodusmovement/seco-file/issues"

@@ -1,3 +1,9 @@
+2.0.0 / 2023-07-12
+------------------
+
+- BREAKING: Require Node v18+ ([#12](https://github.com/exodusmovement/seco-file/pull/12))
+- BREAKING: Remove `encryptData()`/`decryptData()` methods; use secure-container v2+ directly instead ([#13](https://github.com/exodusmovement/seco-file/pull/13))
+
 1.2.0 / 2018-02-22
 ------------------
 - Add `encryptData()` & `decryptData()` methods
